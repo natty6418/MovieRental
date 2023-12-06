@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     isAdmin: Boolean
 });
 
-function validateUser(user) {
+function validateUser(user){
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required(),
         email: Joi.string().min(5).max(255).email().required(),
