@@ -44,12 +44,12 @@ async function addRental(customerId, movieId){
     }
 }
 
-router.get('/', asyncMiddleware(async (req, res) => {
+router.get('/', (async (req, res) => {
     const rental = await Rental.find().sort('-dateOut');
     res.send(rental);
 }));
 
-router.post('/', auth, admin, asyncMiddleware(async (req, res) => {
+router.post('/', auth, admin, (async (req, res) => {
     const { error } = validateRental(req.body);
     if (error) {
         console.log(error.details[0].message);

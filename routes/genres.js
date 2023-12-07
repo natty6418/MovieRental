@@ -74,7 +74,7 @@ async function deleteGenre(id){
 //     {id:4, name:"Horror"}
 // ]
 
-router.get('/', asyncMiddleware(async (req, res) => {
+router.get('/', (async (req, res) => {
     const genres = await getGenre();
     res.send(genres)
 }))
@@ -94,14 +94,14 @@ router.post('/', auth, (req, res)=>{
             res.send(result)
         })
 })
-router.get('/:id', asyncMiddleware(async (req, res) => {
+router.get('/:id', (async (req, res) => {
     const genreId = req.params.id;
     const genre = await getGenreById(genreId);
     res.send(genre)
     // let genre = genres.find(g => g.id === parseInt(genreId));
     // if(!genre) return res.status(404).send("genre not found");
 }));
-router.put('/:id',auth, asyncMiddleware(async(req, res) => {
+router.put('/:id',auth, (async(req, res) => {
     const genreId = req.params.id;
     // const genre = genres.find(g => g.id === parseInt(genreId));
     // if(!genre) return res.status(404).send("genre not found");

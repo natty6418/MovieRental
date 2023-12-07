@@ -46,11 +46,11 @@ async function updateMovie(movieId, title) {
     return movie
 }
 
-router.get('/', asyncMiddleware(async (req, res) => {
+router.get('/', (async (req, res) => {
     const movies = await listMovies()
     res.send(movies)
 }));
-router.post('/',auth, asyncMiddleware(async (req, res)=>{
+router.post('/',auth, (async (req, res)=>{
     
     const {error} = validateMovie(req.body);
     if(error){
@@ -66,7 +66,7 @@ router.post('/',auth, asyncMiddleware(async (req, res)=>{
     const movie = await addMovie(req.body.title, genre, req.body.numberInStock, req.body.dailyRentalRate)
     res.send(movie)
 }));
-router.get('/:id', asyncMiddleware(async (req, res) => {
+router.get('/:id', (async (req, res) => {
 
         const movieId = req.params.id;
         const result = await getMovie(movieId);
@@ -74,7 +74,7 @@ router.get('/:id', asyncMiddleware(async (req, res) => {
         res.send(result);
 }));
 
-router.put('/:id', auth, asyncMiddleware(async (req, res) => {
+router.put('/:id', auth, (async (req, res) => {
         const movieId = req.params.id;
         const { error } = validateMovie(req.body);
         if (error) {
@@ -85,7 +85,7 @@ router.put('/:id', auth, asyncMiddleware(async (req, res) => {
         res.send(result);
 }));
 
-router.delete('/:id', auth, admin, asyncMiddleware(async (req, res) => {
+router.delete('/:id', auth, admin, (async (req, res) => {
         const movieId = req.params.id;
         const result = await deleteMovie(movieId);
         res.send(result);
