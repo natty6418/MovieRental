@@ -1,8 +1,6 @@
 const {User, validateUser} = require('../models/user');
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const config = require('config');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const auth = require('../middleware/auth') //...authorization
@@ -31,9 +29,9 @@ router.post('/', async (req, res) => {
     }
     const user = await User.findOne({email: req.body.email});
     if (user) return res.status(400).send('Email already exists.');
-    const result = await addUser(_.pick(req.body, ['name', 'email', 'password']));
-    const token = user.generateAuthToken()
-    res.header('x-auth-token', token).send(_.pick(result, ['_id','name', 'email']));
+    const newUser = await addUser(_.pick(req.body, ['name', 'email', 'password']));
+    const token = newUser.generateAuthToken()
+    res.header('x-auth-token', token).send(_.pick(newUser, ['_id','name', 'email']));
 })
 
 module.exports = router;

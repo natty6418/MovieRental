@@ -4,6 +4,7 @@ const {Genre} = require('../models/genre');
 const {Movie, validateMovie} = require('../models/movie');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const asyncMiddleware = require('../middleware/async');
 
 async function addMovie(title, genre, numberInStock, dailyRentalRate){
     const movie = new Movie({
@@ -45,14 +46,11 @@ async function updateMovie(movieId, title) {
     return movie
 }
 
-router.get('/', (req, res) => {
-    listMovies()
-        .then((result) => {
-            console.log(result)
-            res.send(result)
-        })
-})
-router.post('/',auth, async (req, res)=>{
+router.get('/', asyncMiddleware(async (req, res) => {
+    const movies = await listMovies()
+    res.send(movies)
+}));
+router.post('/',auth, asyncMiddleware(async (req, res)=>{
     
     const {error} = validateMovie(req.body);
     if(error){
@@ -65,48 +63,31 @@ router.post('/',auth, async (req, res)=>{
     //     name: req.body.name
     // }
     // genres.push(genre);
-    addMovie(req.body.title, genre, req.body.numberInStock, req.body.dailyRentalRate)
-        .then((result) => {
-            res.send(result)
-        })
-})
-router.get('/:id', (req, res) => {
-    const movieId = req.params.id;
-    getMovie(movieId)
-        .then((result) => {
-            console.log(result)
-            res.send(result)
-        })
-    // let genre = genres.find(g => g.id === parseInt(genreId));
-    // if(!genre) return res.status(404).send("genre not found");
-});
-router.put('/:id',auth, (req, res) => {
-    const movieId = req.params.id;
-    // const genre = genres.find(g => g.id === parseInt(genreId));
-    // if(!genre) return res.status(404).send("genre not found");
-    
-    const {error} = validateMovie(req.body);
-    if(error){
-        return res.status(400).send(error.details[0].message);
-    }
-    // genre.name = req.body.name;
-    
-    movieTitle = req.body.title;
-    updateMovie(movieId, movieTitle)
-        .then((result)=>{
-            res.send(result)
-        })
-    // res.send(genre);
-});
+    const movie = await addMovie(req.body.title, genre, req.body.numberInStock, req.body.dailyRentalRate)
+    res.send(movie)
+}));
+router.get('/:id', asyncMiddleware(async (req, res) => {
 
-router.delete('/:id',auth,admin, (req, res)=>{
-    const movieId = req.params.id;
-    // const genre = genres.find(g => g.id === parseInt(genreId));
-    // if(!genre) return res.status(404).send("genre not found");
-    // genres.splice(genres.indexOf(genre), 1);
-    deleteGenre(movieId)
-        .then((result) => {
-            res.send(result);
-        })
-})
+        const movieId = req.params.id;
+        const result = await getMovie(movieId);
+        console.log(result);
+        res.send(result);
+}));
+
+router.put('/:id', auth, asyncMiddleware(async (req, res) => {
+        const movieId = req.params.id;
+        const { error } = validateMovie(req.body);
+        if (error) {
+            return res.status(400).send(error.details[0].message);
+        }
+        const movieTitle = req.body.title;
+        const result = await updateMovie(movieId, movieTitle);
+        res.send(result);
+}));
+
+router.delete('/:id', auth, admin, asyncMiddleware(async (req, res) => {
+        const movieId = req.params.id;
+        const result = await deleteMovie(movieId);
+        res.send(result);
+}));
 module.exports = router;

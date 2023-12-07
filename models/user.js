@@ -35,11 +35,15 @@ function validateUser(user){
     return schema.validate(user);
 }
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({'_id': this._id, 'isAdmin': this.isAdmin}, config.get('jwtPrivateKey')) //generates a jaswon web token to be returned. 
-    //It takes a payload and a private key as arguments. NEVER HARD CODE A PRIVATE KEY!! Instead store it in an environment variable.
-    //SET vidly_jwtPrivateKey=...
-    return token
-}
+    console.log('generating token');
+    const token = jwt.sign({'_id': this._id, 'isAdmin': this.isAdmin}, config.get('jwtPrivateKey')); // generates a JSON web token to be returned.
+    // It takes a payload and a private key as arguments. NEVER HARD CODE A PRIVATE KEY!! Instead store it in an environment variable.
+    // SET vidly_jwtPrivateKey=...
+    console.log(token);
+    return token;
+};
+
+
 const User = mongoose.model('Users', userSchema);
 
 exports.User = User;

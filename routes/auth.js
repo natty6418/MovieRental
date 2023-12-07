@@ -1,8 +1,8 @@
 const {User} = require('../models/user');
 const express = require('express');
 const router = express.Router();
-const _ = require('lodash');
-const bcrypt = require('bcrypt');
+const _ = require('lodash'); //lodash is a utility library used to simplify coding with arrays, numbers, objects, strings, etc. 
+const bcrypt = require('bcrypt'); //bcrypt is a password hashing function
 
 router.post('/', async (req, res) => {
     const {error} = validate(req.body);

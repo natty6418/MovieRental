@@ -1,3 +1,4 @@
+require('express-async-errors')
 const express = require('express');
 const mongoose = require('mongoose');
 const Joi = require('joi');
@@ -12,14 +13,15 @@ const home = require('./routes/home');
 const users = require('./routes/users')
 const customers = require('./routes/customers');
 const auth = require('./routes/auth');
-console.log("jwtPrivateKey:",config.get('jwtPrivateKey'))
 const error = require('./middleware/error'); 
+
+
 if (!config.get('jwtPrivateKey')) { // check if jwtPrivateKey is defined
     console.error('FATAL ERROR: jwtPrivateKey is not defined.');
     process.exit(1);
 }
 
-mongoose.connect('mongodb://0.0.0.0:27017/vidly')
+mongoose.connect('mongodb://127.0.0.1:27017/vidly')
     .then(() => console.log("Connected to MongoDB..."))
     .catch(err => console.log("error", err));
 

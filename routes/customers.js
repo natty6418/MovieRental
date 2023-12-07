@@ -1,6 +1,5 @@
 const express = require('express');
-// const { boolean } = require('joi');
-const router = express.Router();
+const router = express.Router(); //router is a function in express module used to create a new router object
 const mongoose = require('mongoose');
 const {Customer, validate} = require('../models/customer');
 
