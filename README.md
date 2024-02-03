@@ -1,6 +1,3 @@
-Certainly! Below is a simple template for a README file for your movie rental app backend using Node.js and MongoDB:
-
----
 
 # Movie Rental App Backend
 
